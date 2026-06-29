@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>موقع OSOS</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #00ffcc;
+      font-size: 36px;
+      text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      color: #e0e0e0;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+    }
+    img {
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      border: 3px solid #00ffcc;
+      transition: transform 0.3s ease;
+    }
+    img:hover {
+      transform: scale(1.05);
+    }
+    button {
+      background: linear-gradient(90deg, #00ffcc, #0099ff);
+      border: none;
+      color: #121212;
+      padding: 15px 35px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4);
+      transition: all 0.3s ease;
+      margin-top: 30px;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 204, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>موقع OSOS أهلاً بك</h1>
+  <p>اضغط على الزرار تحت عشان تعرف مفاجأة موقعنا!</p>
+  
+  <img src="my-pic.jpg" alt="صورتي" width="300">
+  <br>
+  
+  <button onclick="speakWelcome()">اضغط هنا</button>
+
+  <script>
+    // رسالة ترحيب أول ما الصفحة تفتح علطول
+    window.onload = function() {
+      alert("منور موقعي يا غالي!");
+    };
+
+    // وظيفة الزرار لمعرفة نوع الجهاز
+    function speakWelcome() {
+      let device = navigator.userAgent;
+      let model = "جهاز ذكي";
+
+      if (device.match(/iPhone/i)) {
+        model = "آيفون (iPhone)";
+      } else if (device.match(/Android/i)) {
+        model = "موبايل أندرويد (Android)";
+      }
+
+      alert("أهلاً بك يا بطل في موقع OSOS!\n\nأنت داخل دلوقتي من: " + model);
+    }
+  </script>
+
+</body>
+</html>
