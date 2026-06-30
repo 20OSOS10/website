@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title> موقع اخوك اوس بيتشرف بيك ي رجوله</title>
+    <style>
+        body {
+            background-image: url('pg.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 450px;
+            margin: 40px auto;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            text-align: center;
+            background-color: rgba(15, 23, 42, 0.75); 
+            backdrop-filter: blur(8px); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00f2fe;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], textarea {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: rgba(15, 23, 42, 0.8);
+            color: white;
+            text-align: right;
+            font-family: sans-serif;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            display: block;
+            width: 90%;
+            margin: 0 auto 15px auto;
+            padding: 12px;
+            background-color: #1e293b;
+            border: 1px dashed #00f2fe;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #00f2fe;
+            transition: 0.3s;
+        }
+
+        .file-label:hover {
+            background-color: #0f172a;
+        }
+
+        button {
+            width: 95%;
+            padding: 12px;
+            background: linear-gradient(45deg, #0072ff, #00f2fe);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px #00f2fe;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="your-photo.jpg" alt="أوس" class="profile-img">
+        
+        <h2 style="margin-top: 0; color: #00f2fe;">هذاالموقع يهتم بحماية خصوصياتك و ارسالها بطريقه امنه ومشفره تماما  🌟</h2>
+        <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 20px;">اكتب كل اللي فقلبك هاتو.</p>
+        
+        <input type="text" id="userName" placeholder=" اسمك واسم الغالي...">
+        <input type="text" id="userPhone" placeholder="رقم الهاتف للتواصل المباشر..." maxlength="11">
+        <textarea id="caseDetails" rows="4" placeholder=" ارغي وقول عايز اي متتكسفش احنا اخوات ..."></textarea>
+        
+        <label for="imageInput" class="file-label" id="fileLabelText">📁 اضغط لرفع صوره ليك /ليكي</label>
+        <input type="file" id="imageInput" accept="image/*">
+        
+        <button id="sendBtn">ابعت يبن جيهتي 🚀</button>
+    </div>
+
+    <script>
+    const telegramToken = '8660875273:AAGceZeVAGCFd1m0qmjVsMWMmaBKbgpQx2M'; 
+    const chatId = '6995731060'; 
+
+    document.getElementById('imageInput').addEventListener('change', function() {
+        if(this.files.length > 0) {
+            document.getElementById('fileLabelText').innerText = `✅ تم اختيار: ${this.files[0].name}`;
+        }
+    });
+
+    document.getElementById('sendBtn').addEventListener('click', function() {
+        const name = document.getElementById('userName').value.trim();
+        const phone = document.getElementById('userPhone').value.trim();
+        const details = document.getElementById('caseDetails').value.trim();
+        const fileInput = document.getElementById('imageInput');
+
+        // الشرط الجديد: التأكد من ملء البيانات وأن رقم التليفون مش أقل من 11 رقم
+        if (name === "" || phone === "" || details === "") {
+            alert("وحيات امك اعمل اللي مطلوب منك واحلا مسا عليك يابا ! 📝");
+            return;
+        }
+        
+        // فحص طول رقم التليفون
+        if (phone.length < 11) {
+            alert("يا نجم اكتب رقم تليفونك مظبوط (11 رقم) عشان اعرف اوصلك! 📱❌");
+            return;
+        }
+
+        const btn = document.getElementById('sendBtn');
+        btn.innerText = "جاري الإرسال بأمان... ⏳";
+        btn.disabled = true;
+
+        const messageText = `📥 *رسالة جديدة من ابن جيهتك* 📥\n\n👤 *الاسم:* ${name}\n📞 *الهاتف:* ${phone}\n📝 *الكلام اللي ف قلبه:* ${details}`;
+
+        if (fileInput.files.length > 0) {
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('caption', messageText);
+            formData.append('photo', fileInput.files[0]);
+
+            fetch(`https://api.telegram.org/bot${telegramToken}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => handleResponse(res))
+            .catch(() => alert("حصل خطأ أثناء رفع الصورة، حاول مرة أخرى."));
+        } else {
+            fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+            })
+            .then(res => handleResponse(res))
+            .catch(() => alert("حصل خطأ أثناء الإرسال."));
+        }
+
+        function handleResponse(response) {
+            if(response.ok) {
+                alert("تسلم ايدك ي معلم!تم استقبال رسالتك لما افضى هرد عليك . 🎉");
+                document.getElementById('userName').value = "";
+                document.getElementById('userPhone').value = "";
+                document.getElementById('caseDetails').value = "";
+                document.getElementById('imageInput').value = "";
+                document.getElementById('fileLabelText').innerText = "📁 اضغط لرفع صوره ليك /ليكي";
+            } else {
+                alert("حصلت مشكلة في الإرسال، يرجى المحاولة لاحقاً.");
+            }
+            btn.innerText = "ابعت يبن جيهتي 🚀";
+            btn.disabled = false;
+        }
+    });
+    </script>
+</body>
+</html>
+
